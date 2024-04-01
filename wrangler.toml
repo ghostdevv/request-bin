@@ -1,7 +1,7 @@
-name = "webhook-bin"
+name = "request-bin"
 account_id = "44321e1b7fbd29b56b65c1890a3bbee2"
 compatibility_date = "2024-03-30"
 
 kv_namespaces = [
-    { binding = "DATA", id = "eb5d07da7ac74be9a8fdffc7db5b5701" }
+    { binding = "DATA", id = "a96673126f534c62926c5e6dcd3dc290" }
 ]
