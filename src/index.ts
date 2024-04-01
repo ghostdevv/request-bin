@@ -23,46 +23,38 @@ app.use('/:id', async (c, next) => {
 app.post('/:id', async (c) => {
     const data = await c.req.json<AnyJSON>();
 
-    await c.env.HOOKS.put(
+    await c.env.DATA.put(
         `${c.req.param('id')}:${uuid()}`,
         JSON.stringify(data),
-        { metadata: c.req.header(), expiration: 604800 },
+        { metadata: c.req.header(), expirationTtl: 604800 },
     );
 
     return c.json({ success: true });
 });
 
 app.get('/:id', async (c) => {
-    const keys: string[] = [];
+    const results: { data: AnyJSON; headers: AnyJSON }[] = [];
     let cursor: string = '';
 
     while (true) {
-        const results = await c.env.HOOKS.list({
+        const list = await c.env.DATA.list<AnyJSON>({
             prefix: c.req.param('id'),
             cursor,
         });
 
-        keys.push(...results.keys.map((key) => key.name));
+        for (const { name: key, metadata } of list.keys) {
+            const data = await c.env.DATA.get<AnyJSON>(key, 'json');
+            results.push({ data, headers: metadata || {} });
+        }
 
-        if (results.list_complete) {
+        if (list.list_complete) {
             break;
         }
 
-        cursor = results.cursor;
+        cursor = list.cursor;
     }
 
-    const hooks: { data: AnyJSON; headers: AnyJSON }[] = [];
-
-    for (const key of keys) {
-        const data = await c.env.HOOKS.getWithMetadata<AnyJSON, AnyJSON>(
-            key,
-            'json',
-        );
-
-        hooks.push({ data: data.value, headers: data.metadata });
-    }
-
-    return c.json(hooks);
+    return c.json(results);
 });
 
 export default app;
