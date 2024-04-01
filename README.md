@@ -5,6 +5,8 @@ A simple cloudflare worker request bin. You can send any non-GET request to `/:u
 > [!TIP]
 > Visit `/new` to be redirected to a random uuid!
 
+You can use my hosted version at https://bin.willow.sh/
+
 ## Self Host
 
 1. Setup this repository locally
