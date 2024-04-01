@@ -10,6 +10,10 @@ const app = new Hono<Env>();
 app.use('*', logger());
 app.use('*', cors());
 
+app.get('/new', (c) => {
+	return c.redirect(`/${uuid()}`);
+});
+
 app.use('/:id', async (c, next) => {
 	const id = c.req.param('id');
 
