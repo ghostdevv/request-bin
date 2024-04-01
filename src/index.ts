@@ -37,7 +37,7 @@ app.post('/:id', async (c) => {
 });
 
 app.get('/:id', async (c) => {
-	const results: { data: AnyJSON; headers: AnyJSON }[] = [];
+	const results: { id: string; data: AnyJSON; headers: AnyJSON }[] = [];
 	let cursor: string = '';
 
 	while (true) {
@@ -48,7 +48,12 @@ app.get('/:id', async (c) => {
 
 		for (const { name: key, metadata } of list.keys) {
 			const data = await c.env.DATA.get<AnyJSON>(key, 'json');
-			results.push({ data, headers: metadata || {} });
+
+			results.push({
+				id: key.split(':')[1],
+				data,
+				headers: metadata || {},
+			});
 		}
 
 		if (list.list_complete) {
