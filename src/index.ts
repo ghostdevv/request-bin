@@ -26,7 +26,7 @@ app.post('/:id', async (c) => {
     await c.env.HOOKS.put(
         `${c.req.param('id')}:${uuid()}`,
         JSON.stringify(data),
-        { metadata: c.req.header() },
+        { metadata: c.req.header(), expiration: 604800 },
     );
 
     return c.json({ success: true });
