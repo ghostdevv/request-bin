@@ -12,6 +12,7 @@ export interface RequestEntry {
 	method: string;
 	data: AnyJSON;
 	headers: Record<string, string>;
+	timestamp: number;
 }
 
 export type AnyJSON =

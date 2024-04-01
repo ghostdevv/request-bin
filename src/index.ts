@@ -46,6 +46,8 @@ app.get('/:id', async (c) => {
 		cursor = list.cursor;
 	}
 
+	results.sort((a, b) => b.timestamp - a.timestamp);
+
 	return c.json(results);
 });
 
@@ -55,6 +57,7 @@ app.all('/:id', async (c) => {
 		method: c.req.method.toUpperCase(),
 		data: await c.req.json<AnyJSON>(),
 		headers: c.req.header(),
+		timestamp: Date.now(),
 	};
 
 	await c.env.DATA.put(
