@@ -3,11 +3,3 @@ export function isUUID(thing: any): thing is string {
 		thing,
 	);
 }
-
-export type AnyJSON =
-	| string
-	| number
-	| boolean
-	| null
-	| { [key: string | number | symbol]: AnyJSON }
-	| any[];

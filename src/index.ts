@@ -1,7 +1,7 @@
-import { isUUID, type AnyJSON } from './utils';
+import type { Env, RequestEntry, AnyJSON } from './types';
 import { v4 as uuid } from '@lukeed/uuid';
 import { logger } from 'hono/logger';
-import type { Env } from './types';
+import { isUUID } from './utils';
 import { cors } from 'hono/cors';
 import { Hono } from 'hono';
 
@@ -24,36 +24,19 @@ app.use('/:id', async (c, next) => {
 	await next();
 });
 
-app.post('/:id', async (c) => {
-	const data = await c.req.json<AnyJSON>();
-
-	await c.env.DATA.put(
-		`${c.req.param('id')}:${uuid()}`,
-		JSON.stringify(data),
-		{ metadata: c.req.header(), expirationTtl: 604800 },
-	);
-
-	return c.json({ success: true });
-});
-
 app.get('/:id', async (c) => {
-	const results: { id: string; data: AnyJSON; headers: AnyJSON }[] = [];
+	const results: RequestEntry[] = [];
 	let cursor: string = '';
 
 	while (true) {
-		const list = await c.env.DATA.list<AnyJSON>({
+		const list = await c.env.DATA.list({
 			prefix: c.req.param('id'),
 			cursor,
 		});
 
-		for (const { name: key, metadata } of list.keys) {
-			const data = await c.env.DATA.get<AnyJSON>(key, 'json');
-
-			results.push({
-				id: key.split(':')[1],
-				data,
-				headers: metadata || {},
-			});
+		for (const key of list.keys) {
+			const data = await c.env.DATA.get<RequestEntry>(key.name, 'json');
+			if (data) results.push(data);
 		}
 
 		if (list.list_complete) {
@@ -64,6 +47,23 @@ app.get('/:id', async (c) => {
 	}
 
 	return c.json(results);
+});
+
+app.all('/:id', async (c) => {
+	const entry: RequestEntry = {
+		id: uuid(),
+		method: c.req.method.toUpperCase(),
+		data: await c.req.json<AnyJSON>(),
+		headers: c.req.header(),
+	};
+
+	await c.env.DATA.put(
+		`${c.req.param('id')}:${entry.id}`,
+		JSON.stringify(entry),
+		{ expirationTtl: 604800 },
+	);
+
+	return c.json({ success: true, id: entry.id });
 });
 
 export default app;

@@ -6,3 +6,18 @@ export interface Env extends HonoEnv {
 		DATA: KVNamespace;
 	};
 }
+
+export interface RequestEntry {
+	id: string;
+	method: string;
+	data: AnyJSON;
+	headers: Record<string, string>;
+}
+
+export type AnyJSON =
+	| string
+	| number
+	| boolean
+	| null
+	| { [key: string | number | symbol]: AnyJSON }
+	| any[];
