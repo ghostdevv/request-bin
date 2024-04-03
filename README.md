@@ -1,11 +1,18 @@
 # Request Bin
 
-A simple cloudflare worker request bin. You can send any non-GET request to `/:uuid` and it will be saved for a week. Making a GET request (e.g. in browser) will display every request to that bin.
+A simple cloudflare worker based request bin. You can use my hosted version at https://bin.willow.sh/ or [self host](#self-host)!
 
-> [!TIP]
-> Visit `/new` to be redirected to a random uuid!
+## Endpoints
 
-You can use my hosted version at https://bin.willow.sh/
+### ANY `/:id`
+
+You can send any non-GET request to this endpoint and it'll be saved for you. E.g. a webhook via a POST request.
+
+If you send a GET request it'll return all the saved requests. The data includes the JSON body, headers, and a timestamp.
+
+### GET `/new`
+
+This endpoint will create a new id and redirect you to it. It's not required as all uuids (v4) are automatically valid request bins. 
 
 ## Self Host
 
