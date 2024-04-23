@@ -12,8 +12,8 @@ devDependencies:
     specifier: ^2.0.1
     version: 2.0.1
   hono:
-    specifier: ^4.1.7
-    version: 4.1.7
+    specifier: ^4.2.7
+    version: 4.2.7
   wrangler:
     specifier: ^3.41.0
     version: 3.41.0(@cloudflare/workers-types@4.20240329.0)
@@ -517,8 +517,8 @@ packages:
       function-bind: 1.1.2
     dev: true
 
-  /hono@4.1.7:
-    resolution: {integrity: sha512-Qa9/OM64d3we/COpxpJNT8p2IEvXbvRzp2eX4wf48eDvqoU3pBrnbY6zAF2rK878GxkkfCo6yipZXNsPiTrBMQ==}
+  /hono@4.2.7:
+    resolution: {integrity: sha512-k1xHi86tJnRIVvqhFMBDGFKJ8r5O+bEsT4P59ZK59r0F300Xd910/r237inVfuT/VmE86RQQffX4OYNda6dLXw==}
     engines: {node: '>=16.0.0'}
     dev: true
 
