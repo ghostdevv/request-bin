@@ -26,7 +26,7 @@ app.use('/:id', async (c, next) => {
 
 app.get('/:id', async (c) => {
 	const results: RequestEntry[] = [];
-	let cursor: string = '';
+	let cursor: string | undefined;
 
 	while (true) {
 		const list = await c.env.DATA.list({
